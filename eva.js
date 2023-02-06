@@ -34,8 +34,11 @@ function isString(exp){
 
 const eva = new Eva();
 
+// int == int
 assert.strictEqual(eva.eval(3), 3);
+//'string' == 'string'
 assert.strictEqual(eva.eval('"n0ko"'), "n0ko");
+//(1+2) = 3
 assert.strictEqual(eva.eval(['+', 1, 2]), 3);
 //(6-3) = 3
 assert.strictEqual(eva.eval(['-', 6, 3]), 3);
@@ -43,7 +46,7 @@ assert.strictEqual(eva.eval(['-', 6, 3]), 3);
 assert.strictEqual(eva.eval(['*', 1, 3]), 3);
 //(1+1) + 1 = 3
 assert.strictEqual(eva.eval(['+', ['+', 1, 1], 1]), 3);
+//(var x = 3)
+assert.strictEqual(eva.eval(['var','x', 3]), 3);
 
 console.log('eva sees no evil');
-console.log('this is a test commit');
-
