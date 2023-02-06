@@ -45,8 +45,14 @@ function isString(exp){
 function isVar(exp){
     return typeof exp === 'string' && /^[a-zA-Z][a-zA-Z0-9_]*$/.test(exp);
 }
-const eva = new Eva();
 
+//--------------TESTS---------------
+const eva = new Eva(new Environment({
+    null: null,
+    true: true,
+    false: false,
+    VERSION: '0.1',
+}));
 // int == int
 assert.strictEqual(eva.eval(3), 3);
 //'string' == 'string'
@@ -63,7 +69,11 @@ assert.strictEqual(eva.eval(['+', ['+', 1, 1], 1]), 3);
 assert.strictEqual(eva.eval(['var','x', 3]), 3);
 //x = 3
 assert.strictEqual(eva.eval('x'), 3);
-//y = undefined
-assert.strictEqual(eva.eval('y'), 3);
+//var y declaration
+assert.strictEqual(eva.eval(['var','y', 6]), 6);
+//(var y = 6)
+assert.strictEqual(eva.eval('y'), 6);
+//built in variables
+assert.strictEqual(eva.eval('VERSION'), '0.1');
 
 console.log('eva sees no evil');
