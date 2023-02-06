@@ -1,9 +1,13 @@
 const assert = require ('assert')
+const Environment = require ('./environment')
 
 console.log('Eva Rising...')
 
 class Eva{
-    eval(exp){
+    constructor(global = new Environment){
+        this.global = global;
+    }
+    eval(exp, env = this.global){
         //self-evaluating expres
         if (isNumber(exp)){
             return exp;
@@ -20,6 +24,10 @@ class Eva{
         }
         if (exp[0] === '*'){
             return this.eval(exp[1]) * this.eval(exp[2]);
+        }
+        if (exp[0] === 'var'){
+            const[_, name, value] = exp;
+            return env.define(name, value);
         }
         throw `Unimplemented ${JSON.stringify(exp)}`
     }
