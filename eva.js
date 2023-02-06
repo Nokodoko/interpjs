@@ -27,7 +27,7 @@ class Eva{
         }
         if (exp[0] === 'var'){
             const[_, name, value] = exp;
-            return env.define(name, value);
+            return env.define(name, this.eval(value));
         }
         if(isVar(exp)){
             return env.lookup(exp);
@@ -48,6 +48,7 @@ function isVar(exp){
 
 //--------------TESTS---------------
 const eva = new Eva(new Environment({
+    //preinstalled variables
     null: null,
     true: true,
     false: false,
@@ -75,5 +76,7 @@ assert.strictEqual(eva.eval(['var','y', 6]), 6);
 assert.strictEqual(eva.eval('y'), 6);
 //built in variables
 assert.strictEqual(eva.eval('VERSION'), '0.1');
+//isUser = true
+assert.strictEqual(eva.eval(['var','isUser', 'true']), true);
 
 console.log('eva sees no evil');
