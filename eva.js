@@ -17,23 +17,24 @@ class Eva{
             return exp.slice(1, -1);
         }
         if (exp[0] === '+'){
-            return this.eval(exp[1]) + this.eval(exp[2]);
+            return this.eval(exp[1], env) + this.eval(exp[2], env);
         }
         if (exp[0] === '-'){
-            return this.eval(exp[1]) - this.eval(exp[2]);
+            return this.eval(exp[1], env) - this.eval(exp[2], env);
         }
         if (exp[0] === '*'){
-            return this.eval(exp[1]) * this.eval(exp[2]);
+            return this.eval(exp[1], env) * this.eval(exp[2], env);
         }
         if (exp[0] === '/'){
-            return this.eval(exp[1]) / this.eval(exp[2]);
+            return this.eval(exp[1], env) / this.eval(exp[2], env);
         }
         if (exp[0] === 'var'){
             const[_, name, value] = exp;
             return env.define(name, this.eval(value));
         }
         if (exp[0] === 'begin'){
-            return this._evalblock(exp, env);
+            const blockEnv = new Environment({}, env);
+            return this._evalblock(exp, blockEnv);
         }
         if(isVar(exp)){
             return env.lookup(exp);
@@ -103,4 +104,15 @@ assert.strictEqual(eva.eval(
     ]),
     3);
 
-console.log('eva sees no evil');
+//scope Blocks:
+assert.strictEqual(eva.eval(
+    ['begin',
+        ['var', 'x', 3],
+            ['begin',
+            ['var', 'x', 33],
+            'x'
+        ],
+        'x',
+    ]),
+3);
+console.log('Eva sees no evil');

@@ -1,5 +1,6 @@
 class Environment{
-    constructor(record = {}){
+    constructor(record = {}, parent = null){
+        this.parent = parent;
         this.record = record;
     }
     //define (set)
