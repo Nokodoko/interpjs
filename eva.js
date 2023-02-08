@@ -25,14 +25,30 @@ class Eva{
         if (exp[0] === '*'){
             return this.eval(exp[1]) * this.eval(exp[2]);
         }
+        if (exp[0] === '/'){
+            return this.eval(exp[1]) / this.eval(exp[2]);
+        }
         if (exp[0] === 'var'){
             const[_, name, value] = exp;
             return env.define(name, this.eval(value));
+        }
+        if (exp[0] === 'begin'){
+            return this._evalblock(exp, env);
         }
         if(isVar(exp)){
             return env.lookup(exp);
         }
         throw `Unimplemented ${JSON.stringify(exp)}`
+    }
+
+    _evalblock(block, env){
+        let result;
+        const [_tag, ...expressions] = block;
+
+        expressions.forEach(exp => {
+            result = this.eval(exp, env)
+        });
+        return result;
     }
 }
 
@@ -45,7 +61,6 @@ function isString(exp){
 function isVar(exp){
     return typeof exp === 'string' && /^[a-zA-Z][a-zA-Z0-9_]*$/.test(exp);
 }
-
 //--------------TESTS---------------
 const eva = new Eva(new Environment({
     //preinstalled variables
@@ -78,5 +93,14 @@ assert.strictEqual(eva.eval('y'), 6);
 assert.strictEqual(eva.eval('VERSION'), '0.1');
 //isUser = true
 assert.strictEqual(eva.eval(['var','isUser', 'true']), true);
+
+//Variable blocks:
+assert.strictEqual(eva.eval(
+    ['begin',
+        ['var', 'x', 3],
+        ['var', 'y', 2],
+        ['/', ['*', 'x', 'y'], 'y'],
+    ]),
+    3);
 
 console.log('eva sees no evil');
