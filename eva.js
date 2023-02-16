@@ -106,14 +106,28 @@ assert.strictEqual(eva.eval(
 
 
 //scope Blocks:
-//assert.strictEqual(eva.eval(
-//    ['begin',
-//        ['var', 'x', 3],
-//            ['begin',
-//            ['var', 'x', 33],
-//            'x'
-//        ],
-//        'x',
-//    ]),
-//3);
+assert.strictEqual(eva.eval(
+    ['begin',
+        ['var', 'x', 3],
+            ['begin',
+            ['var', 'x', 33],
+            'x'
+        ],
+        'x',
+    ]),
+3);
+
+//scope chain
+assert.strictEqual(eva.eval(
+    ['begin',
+        ['var', 'value', 10],
+            ['begin',
+            ['var', 'result',
+                ['var', 'x', ['+', 'value', 10]],
+            'x' 
+            ]],
+        'result'
+    ]),
+20);
+
 console.log('Eva sees no evil');
