@@ -10,13 +10,18 @@ class Environment{
     }
     //lookup 
     lookup(name){
-        //this.record[name] = name;
-        if (!this.record.hasOwnProperty(name)){
-            throw new ReferenceError(`Variable ${name} is not defined.`)
+       return this.resolve(name).record[name];
+    }
+
+    //identifier resolution
+    resolve(name){
+        if(this.record.hasOwnProperty(name)){
+                return this;
+            }
+        if (this.parent == null){
+        throw new ReferenceError(`Variable ${name} is not defined.`);
         }
-        return this.record[name];
+        return this.parent.resolve(name);
     }
     //assign (self-evaluate)
 }
-
-module.exports = Environment;

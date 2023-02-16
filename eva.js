@@ -16,6 +16,9 @@ class Eva{
             //exclude quotes in self-evaluation
             return exp.slice(1, -1);
         }
+        if(isVar(exp)){
+            return env.lookup(exp);
+        }
         if (exp[0] === '+'){
             return this.eval(exp[1], env) + this.eval(exp[2], env);
         }
@@ -36,9 +39,7 @@ class Eva{
             const blockEnv = new Environment({}, env);
             return this._evalblock(exp, blockEnv);
         }
-        if(isVar(exp)){
-            return env.lookup(exp);
-        }
+
         throw `Unimplemented ${JSON.stringify(exp)}`
     }
 
@@ -46,9 +47,7 @@ class Eva{
         let result;
         const [_tag, ...expressions] = block;
 
-        expressions.forEach(exp => {
-            result = this.eval(exp, env)
-        });
+        expressions.forEach(exp => { result = this.eval(exp, env) });
         return result;
     }
 }
@@ -102,7 +101,7 @@ assert.strictEqual(eva.eval(
         ['var', 'y', 2],
         ['/', ['*', 'x', 'y'], 'y'],
     ]),
-    3);
+3);
 
 //scope Blocks:
 assert.strictEqual(eva.eval(
@@ -115,4 +114,18 @@ assert.strictEqual(eva.eval(
         'x',
     ]),
 3);
+
+////scope chain -- implicit returns
+assert.strictEqual(eva.eval(
+    ['begin',
+        ['var', 'value', 10],
+            ['begin',
+            ['var', 'result',
+                ['var', 'x', ['+', "value", 10]],
+            'x' 
+            ]],
+        'result'
+    ]),
+20);
+
 console.log('Eva sees no evil');
