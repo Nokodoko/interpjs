@@ -25,3 +25,5 @@ class Environment{
     }
     //assign (self-evaluate)
 }
+
+module.exports = Environment;
