@@ -25,7 +25,8 @@ class Environment{
     }
     //assign (self-evaluate)
     assign(name, value){
-       return this.resolve(name).record[name] = value;
+        this.resolve(name).record[name] = value;
+        return value;
     }
 }
 
