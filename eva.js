@@ -121,13 +121,13 @@ assert.strictEqual(eva.eval(
 assert.strictEqual(eva.eval(
     ['begin',
         ['var', 'value', 10],
-            ['begin', ['var', 'result', 
+            ['var', 'result', 
             [ 'begin',
                 ['var', 'x', ['+', 'value', 10]],
             'x' 
             ]],
         'result'
-    ]]),
+    ]),
 20);
 
 console.log('Eva sees no evil');
