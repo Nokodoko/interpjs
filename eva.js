@@ -30,7 +30,7 @@ class Eva{
         }
         if (exp[0] === 'var'){
             const[_, name, value] = exp;
-            return env.define(name, this.eval(value));
+            return env.define(name, this.eval(value, env));
         }
         if (exp[0] === 'begin'){
             const blockEnv = new Environment({}, env);
@@ -121,8 +121,8 @@ assert.strictEqual(eva.eval(
 assert.strictEqual(eva.eval(
     ['begin',
         ['var', 'value', 10],
-            ['begin',
-            ['var', 'result',
+            ['var', 'result', 
+            [ 'begin',
                 ['var', 'x', ['+', 'value', 10]],
             'x' 
             ]],
