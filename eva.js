@@ -32,6 +32,10 @@ class Eva{
             const[_, name, value] = exp;
             return env.define(name, this.eval(value, env));
         }
+        if (exp[0] === 'set'){
+            const[_, name, value] = exp;
+            return env.assign(name, this.eval(value, env));
+        }
         if (exp[0] === 'begin'){
             const blockEnv = new Environment({}, env);
             return this._evalblock(exp, blockEnv);
@@ -129,5 +133,16 @@ assert.strictEqual(eva.eval(
         'result'
     ]),
 20);
+
+//variable assignment
+assert.strictEqual(eva.eval(
+    ['begin',
+        ['var', 'value', 10],
+            [ 'begin',
+                ['set', 'value', 33],
+            ],
+        'value'
+    ]),
+33);
 
 console.log('Eva sees no evil');

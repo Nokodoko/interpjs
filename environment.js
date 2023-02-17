@@ -24,6 +24,9 @@ class Environment{
         return this.parent.resolve(name);
     }
     //assign (self-evaluate)
+    assign(name, value){
+       return this.resolve(name).record[name] = value;
+    }
 }
 
 module.exports = Environment;
